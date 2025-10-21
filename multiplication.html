@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренажер таблиці множення</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .screen {
+            background: white;
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        #mainScreen {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .greeting {
+            color: #fd79a8;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        h1 {
+            color: #2d3436;
+            margin-bottom: 30px;
+            font-size: 2.8em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .cover-image {
+            width: 220px;
+            height: 220px;
+            margin: 25px auto;
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5em;
+            color: #e17055;
+            border: 10px solid #fd79a8;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #fd79a8, #e17055);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            font-size: 1.4em;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+        }
+
+        .number-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 35px 0;
+        }
+
+        .number-btn {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            border: none;
+            padding: 25px;
+            font-size: 1.8em;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .number-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .cat-image {
+            width: 180px;
+            height: 180px;
+            margin: 25px auto;
+            background: linear-gradient(45deg, #dfe6e9, #b2bec3);
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5em;
+            border: 6px solid #636e72;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .progress {
+            background: linear-gradient(45deg, #00b894, #00a085);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            margin: 25px 0;
+            font-size: 1.3em;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .lets-go {
+            background: linear-gradient(45deg, #a29bfe, #6c5ce7);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 30px;
+            margin: 20px 0;
+            font-size: 1.4em;
+            display: inline-block;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .question {
+            background: linear-gradient(45deg, #ffeaa7, #fdcb6e);
+            padding: 25px;
+            border-radius: 20px;
+            margin: 25px 0;
+            font-size: 2.2em;
+            color: #2d3436;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            font-weight: bold;
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .answer-btn {
+            background: linear-gradient(45deg, #a29bfe, #6c5ce7);
+            color: white;
+            border: none;
+            padding: 25px;
+            font-size: 1.5em;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
+        }
+
+        .answer-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .back-btn {
+            background: linear-gradient(45deg, #636e72, #2d3436);
+            margin-top: 25px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+        }
+
+        .correct {
+            background: linear-gradient(45deg, #00b894, #00a085) !important;
+            transform: scale(1.05);
+        }
+
+        .wrong {
+            background: linear-gradient(45deg, #d63031, #c23616) !important;
+            transform: scale(1.05);
+        }
+
+        .result-screen {
+            text-align: center;
+        }
+
+        .result-image {
+            width: 200px;
+            height: 200px;
+            margin: 25px auto;
+            background: linear-gradient(45deg, #ffeaa7, #fab1a0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 6em;
+            border: 10px solid #fd79a8;
+        }
+
+        .score {
+            font-size: 3em;
+            color: #2d3436;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .message {
+            font-size: 1.4em;
+            color: #636e72;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Головний екран -->
+    <div id="mainScreen" class="screen">
+        <div class="greeting">Привіт, 4-А! ✨</div>
+        <h1>Таблиця множення</h1>
+        <div class="cover-image">🐱</div>
+        <button class="btn" onclick="showNumberSelection()">ПОЧАТИ</button>
+    </div>
+
+    <!-- Екран вибору числа -->
+    <div id="numberScreen" class="screen">
+        <div class="greeting">Привіт, 4-А! ✨</div>
+        <h1>Обери число</h1>
+        <div class="number-buttons" id="numberButtons">
+            <!-- Кнопки з числами будуть додані через JavaScript -->
+        </div>
+        <button class="btn back-btn" onclick="showMainScreen()">Назад</button>
+    </div>
+
+    <!-- Екран гри -->
+    <div id="gameScreen" class="screen">
+        <div class="greeting">Привіт, 4-А! ✨</div>
+        <div class="cat-image">😸</div>
+        <div class="lets-go" id="letsGo">ПОГНАЛИ!</div>
+        <div class="progress" id="progress">Питання: 1/10</div>
+        <div class="question" id="question">3 × 9 = ?</div>
+        <div class="answers" id="answers">
+            <!-- Варіанти відповідей будуть додані через JavaScript -->
+        </div>
+        <button class="btn back-btn" onclick="showNumberSelection()">Назад</button>
+    </div>
+
+    <!-- Екран результатів -->
+    <div id="resultScreen" class="screen result-screen">
+        <div class="greeting">Привіт, 4-А! ✨</div>
+        <div class="result-image" id="resultImage">🎉</div>
+        <div class="score" id="finalScore">10/10</div>
+        <div class="message" id="resultMessage">Відмінно! Ти геній! 🚀</div>
+        <button class="btn" onclick="showNumberSelection()">Спробувати ще</button>
+        <button class="btn back-btn" onclick="showMainScreen()">На головну</button>
+    </div>
+
+    <script>
+        let currentNumber = 0;
+        let currentQuestion = 0;
+        const totalQuestions = 10;
+        let score = 0;
+        let usedExamples = new Set();
+
+        // Створюємо звуки
+        const correctSound = new Audio("data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==");
+        const wrongSound = new Audio("data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==");
+
+        // Функція для створення приємного звуку (correct)
+        function createCorrectSound() {
+            const context = new AudioContext();
+            const oscillator = context.createOscillator();
+            const gainNode = context.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(context.destination);
+            
+            oscillator.frequency.value = 523.25; // Нота C5
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, context.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.5);
+            
+            oscillator.start(context.currentTime);
+            oscillator.stop(context.currentTime + 0.5);
+        }
+
+        // Функція для створення неприємного звуку (wrong)
+        function createWrongSound() {
+            const context = new AudioContext();
+            const oscillator = context.createOscillator();
+            const gainNode = context.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(context.destination);
+            
+            oscillator.frequency.value = 220; // Низька нота A3
+            oscillator.type = 'sawtooth';
+            
+            gainNode.gain.setValueAtTime(0.3, context.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, context.currentTime + 0.3);
+            
+            oscillator.start(context.currentTime);
+            oscillator.stop(context.currentTime + 0.3);
+        }
+
+        // Створюємо кнопки з числами та зірочками
+        function createNumberButtons() {
+            const container = document.getElementById('numberButtons');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= 9; i++) {
+                const button = document.createElement('button');
+                button.className = 'number-btn';
+                button.textContent = i + ' *';
+                button.onclick = () => startGame(i);
+                container.appendChild(button);
+            }
+        }
+
+        // Показуємо головний екран
+        function showMainScreen() {
+            hideAllScreens();
+            document.getElementById('mainScreen').style.display = 'block';
+        }
+
+        // Показуємо екран вибору числа
+        function showNumberSelection() {
+            hideAllScreens();
+            document.getElementById('numberScreen').style.display = 'block';
+            createNumberButtons();
+        }
+
+        // Починаємо гру з обраним числом
+        function startGame(number) {
+            currentNumber = number;
+            currentQuestion = 0;
+            score = 0;
+            usedExamples.clear();
+            hideAllScreens();
+            document.getElementById('gameScreen').style.display = 'block';
+            
+            // Оновлюємо напис "Погнали!" з обраним числом
+            document.getElementById('letsGo').textContent = `${currentNumber} × таблиця - ПОГНАЛИ!`;
+            
+            generateQuestion();
+        }
+
+        // Генеруємо нове питання
+        function generateQuestion() {
+            if (currentQuestion >= totalQuestions) {
+                showResults();
+                return;
+            }
+            
+            currentQuestion++;
+            
+            // Оновлюємо прогрес
+            document.getElementById('progress').textContent = `Питання: ${currentQuestion}/${totalQuestions}`;
+            
+            // Генеруємо унікальний приклад
+            let randomMultiplier, exampleKey;
+            do {
+                randomMultiplier = Math.floor(Math.random() * 10) + 1;
+                exampleKey = `${currentNumber}x${randomMultiplier}`;
+            } while (usedExamples.has(exampleKey) && usedExamples.size < 10);
+            
+            usedExamples.add(exampleKey);
+            const correctAnswer = currentNumber * randomMultiplier;
+            
+            // Оновлюємо питання
+            document.getElementById('question').textContent = `${currentNumber} × ${randomMultiplier} = ?`;
+            
+            // Генеруємо варіанти відповідей
+            generateAnswers(correctAnswer, randomMultiplier);
+        }
+
+        // Генеруємо варіанти відповідей
+        function generateAnswers(correctAnswer, multiplier) {
+            const answersContainer = document.getElementById('answers');
+            answersContainer.innerHTML = '';
+            
+            const answers = [correctAnswer];
+            
+            // Додаємо неправильні відповіді
+            while (answers.length < 4) {
+                let wrongAnswer;
+                const variation = Math.floor(Math.random() * 3) + 1;
+                
+                if (Math.random() > 0.5) {
+                    // Відповідь дуже близька до правильної
+                    wrongAnswer = correctAnswer + (Math.random() > 0.5 ? variation : -variation);
+                } else {
+                    // Випадкова відповідь в межах таблиці множення
+                    const randomNum = Math.floor(Math.random() * 9) + 1;
+                    wrongAnswer = currentNumber * randomNum;
+                }
+                
+                // Переконуємося, що відповідь позитивна, не повторюється і не дорівнює правильній
+                if (wrongAnswer > 0 && wrongAnswer !== correctAnswer && !answers.includes(wrongAnswer)) {
+                    answers.push(wrongAnswer);
+                }
+            }
+            
+            // Перемішуємо відповіді
+            shuffleArray(answers);
+            
+            // Створюємо кнопки з відповідями
+            answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.className = 'answer-btn';
+                button.textContent = answer;
+                button.onclick = () => checkAnswer(answer, correctAnswer, button);
+                answersContainer.appendChild(button);
+            });
+        }
+
+        // Перевіряємо відповідь
+        function checkAnswer(selectedAnswer, correctAnswer, button) {
+            const allButtons = document.querySelectorAll('.answer-btn');
+            
+            // Блокуємо всі кнопки
+            allButtons.forEach(btn => {
+                btn.disabled = true;
+                btn.style.transform = 'scale(1)';
+                if (parseInt(btn.textContent) === correctAnswer) {
+                    btn.classList.add('correct');
+                }
+            });
+            
+            // Якщо відповідь неправильна, додаємо червоний колір та неприємний звук
+            if (selectedAnswer !== correctAnswer) {
+                button.classList.add('wrong');
+                createWrongSound(); // Неприємний звук
+            } else {
+                score++;
+                createCorrectSound(); // Приємний звук
+            }
+            
+            // Чекаємо 1.5 секунди перед наступним питанням
+            setTimeout(() => {
+                generateQuestion();
+            }, 1500);
+        }
+
+        // Показуємо результати
+        function showResults() {
+            hideAllScreens();
+            const resultScreen = document.getElementById('resultScreen');
+            resultScreen.style.display = 'block';
+            
+            document.getElementById('finalScore').textContent = `${score}/${totalQuestions}`;
+            
+            // Визначаємо повідомлення та емодзі на основі результату
+            let message, emoji;
+            const percentage = (score / totalQuestions) * 100;
+            
+            if (percentage >= 90) {
+                message = "Відмінно! 4-А - генії! 🚀";
+                emoji = "🎉";
+            } else if (percentage >= 70) {
+                message = "Добре! 4-А так тримати! 👍";
+                emoji = "😊";
+            } else if (percentage >= 50) {
+                message = "Непогано! 4-А потренуйтеся ще! 💪";
+                emoji = "🤔";
+            } else {
+                message = "Не засмучуйтесь! 4-А спробуйте ще раз! 🐱";
+                emoji = "😺";
+            }
+            
+            document.getElementById('resultMessage').textContent = message;
+            document.getElementById('resultImage').textContent = emoji;
+        }
+
+        // Допоміжна функція для перемішування масиву
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Ховаємо всі екрани
+        function hideAllScreens() {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.style.display = 'none';
+            });
+        }
+
+        // Ініціалізація при завантаженні
+        window.onload = function() {
+            createNumberButtons();
+        }
+    </script>
+</body>
+</html>
